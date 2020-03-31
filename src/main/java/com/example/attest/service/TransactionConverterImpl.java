@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -24,6 +26,14 @@ public class TransactionConverterImpl implements TransactionConverter {
 
 		return transactionApi != null ? getModelMapper().map(transactionApi, domainClass) : null;
 	}
+
+	@Override
+	public Page<TransactionApi> toApiPage(Page<Transaction> transactionPage) {
+
+		return new PageImpl<TransactionApi>(toApiList(transactionPage.getContent()));
+
+	}
+
 
 	@Override
 	public List<TransactionApi> toApiList(List<Transaction> transactions) {

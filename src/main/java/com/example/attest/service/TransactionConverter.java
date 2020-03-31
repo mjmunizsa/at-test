@@ -3,13 +3,15 @@ package com.example.attest.service;
 import com.example.attest.model.api.TransactionApi;
 import com.example.attest.model.domain.Transaction;
 import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface TransactionConverter {
 
-	public TransactionApi toApiModel(Transaction transaction, Class<TransactionApi> apiClass);
+	TransactionApi toApiModel(Transaction transaction, Class<TransactionApi> apiClass);
 
-	public Transaction toModelApi(TransactionApi transactionApi, Class<Transaction> domainClass);
+	Transaction toModelApi(TransactionApi transactionApi, Class<Transaction> domainClass);
 
+	Page<TransactionApi> toApiPage(Page<Transaction> transactionPage);
 
 	List<TransactionApi> toApiList(List<Transaction> transactions);
 }
