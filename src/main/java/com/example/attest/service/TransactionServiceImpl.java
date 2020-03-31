@@ -39,22 +39,11 @@ public class TransactionServiceImpl implements TransactionService {
 
 	}
 
-	@Override
-	public List<TransactionApi> findByAccountIbanOrderByAmount(String accountIban, String direction) {
-
-		Sort sort = null;
-		if (direction.equals(Direction.DESC.name())) {
-			sort = Sort.by(Sort.Direction.DESC, "amount");
-		} else {
-			sort = Sort.by(Direction.ASC, "amount");
-		}
-		return transactionConverter.toApiList(transactionRepository.findByAccountIban(accountIban, sort));
-	}
 
 	@Override
 	public Page<TransactionApi> findByAccountIban(String accountIban, Pageable pageable) {
 
-		return transactionConverter.toApiPage(transactionRepository.findByAccountIban(accountIban, pageable));
+		return transactionConverter.toApiPage(transactionRepository.findByAccountIban(accountIban, pageable),pageable);
 
 	}
 

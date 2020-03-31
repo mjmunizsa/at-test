@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -28,9 +29,11 @@ public class TransactionConverterImpl implements TransactionConverter {
 	}
 
 	@Override
-	public Page<TransactionApi> toApiPage(Page<Transaction> transactionPage) {
+	public Page<TransactionApi> toApiPage(Page<Transaction> transactionPage, Pageable pageable) {
 
-		return new PageImpl<TransactionApi>(toApiList(transactionPage.getContent()));
+		return new PageImpl<TransactionApi>(toApiList(transactionPage.getContent()),
+			pageable,
+			transactionPage.getTotalElements());
 
 	}
 

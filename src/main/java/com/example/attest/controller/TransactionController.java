@@ -19,8 +19,6 @@ public class TransactionController extends AbstractApiController {
 	private static final String RESOURCE_MAPPING = "/transaction";
 	private static final String RESOURCE_ID = "/{reference}";
 
-	//private static final String DIRECTION_BY_DEFAULT = "ASC";
-
 	private TransactionService transactionService;
 
 	public TransactionController(TransactionService transactionService) {
@@ -42,16 +40,6 @@ public class TransactionController extends AbstractApiController {
 		return new ResponseEntity<Page<TransactionApi>>(transactionService.findByAccountIban(account_iban, pageable),
 			HttpStatus.OK);
 	}
-
-//	@GetMapping(RESOURCE_MAPPING)
-//	public ResponseEntity<List<TransactionApi>> finTransactionsByAccountIbanOrderAmount(
-//		@RequestParam("account_iban") String account_iban,
-//		@RequestParam(defaultValue = DIRECTION_BY_DEFAULT, required = false) String direction) {
-//
-//		return new ResponseEntity<List<TransactionApi>>(transactionService.findByAccountIbanOrderByAmount(account_iban,
-//			direction),HttpStatus.OK);
-//	}
-
 
 	@PostMapping(RESOURCE_MAPPING)
 	public ResponseEntity<TransactionApi> postTransaction(@RequestBody TransactionApi transactionApi) {
