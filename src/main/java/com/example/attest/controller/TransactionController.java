@@ -36,10 +36,11 @@ public class TransactionController extends AbstractApiController {
 	}
 
 	@GetMapping(RESOURCE_MAPPING)
-	public Page<TransactionApi> finTransactionbyAccountIban(@RequestParam("account_iban") String account_iban,
+	public ResponseEntity<Page<TransactionApi>> finTransactionbyAccountIban(@RequestParam("account_iban") String account_iban,
 		Pageable pageable) {
 
-		return transactionService.findByAccountIban(account_iban, pageable);
+		return new ResponseEntity<Page<TransactionApi>>(transactionService.findByAccountIban(account_iban, pageable),
+			HttpStatus.OK);
 	}
 
 //	@GetMapping(RESOURCE_MAPPING)
