@@ -25,7 +25,7 @@ public class Transaction {
 	@Column(name = "ID", nullable = false, length = 36)
 	private String id;
 
-	@Column(name = "REFERENCE", nullable = false, unique = true, length = 6)
+	@Column(name = "REFERENCE", nullable = false, unique = true, length = 34)
 	private String reference;
 
 	@Column(name = "IBAN", nullable = false, length = 34)

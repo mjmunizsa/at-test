@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class TransactionApi {
 
-	@Size(max = 6)
+	@Size(max = 34)
 	private String reference;
 
 	@NotNull

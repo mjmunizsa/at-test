@@ -15,10 +15,12 @@ public class TransactionServiceImpl implements TransactionService {
 
 	private Tracer tracer;
 
-	public TransactionServiceImpl(TransactionRepository transactionRepository, TransactionConverter transactionConverter) {
+	public TransactionServiceImpl(TransactionRepository transactionRepository, TransactionConverter transactionConverter,
+		Tracer tracer) {
 
 		this.transactionRepository = transactionRepository;
 		this.transactionConverter = transactionConverter;
+		this.tracer = tracer;
 	}
 
 
