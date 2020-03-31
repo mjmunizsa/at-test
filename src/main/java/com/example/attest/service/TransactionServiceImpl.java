@@ -4,6 +4,10 @@ import brave.Tracer;
 import com.example.attest.dao.TransactionRepository;
 import com.example.attest.model.api.TransactionApi;
 import com.example.attest.model.domain.Transaction;
+import java.util.ArrayList;
+import java.util.List;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -35,6 +39,18 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
+	public List<TransactionApi> findByAccountIbanOrderByAmount(String accountIban, String direction) {
+		Sort sort = null;
+		if (direction.equals(Direction.DESC.name())) {
+			sort = Sort.by(Sort.Direction.DESC, "amount");
+		} else {
+			sort = Sort.by(Direction.ASC, "amount");
+		}
+		return transactionConverter.toApiList(transactionRepository.findByAccountIban(accountIban, sort));
+	}
+
+
+	@Override
 	public TransactionApi create(TransactionApi transactionApi) {
 
 		Transaction transaction = transactionConverter.toModelApi(transactionApi, Transaction.class);
@@ -49,7 +65,7 @@ public class TransactionServiceImpl implements TransactionService {
 					.spanIdString()));
 		}
 
-		transaction = transactionRepository.saveAndFlush(transaction);
+		transaction = transactionRepository.save(transaction);
 
 		return transactionConverter.toApiModel(transaction, TransactionApi.class);
 	}

@@ -2,6 +2,7 @@ package com.example.attest.service;
 
 import com.example.attest.model.api.TransactionApi;
 import com.example.attest.model.domain.Transaction;
+import java.util.List;
 
 public interface TransactionConverter {
 
@@ -10,4 +11,5 @@ public interface TransactionConverter {
 	public Transaction toModelApi(TransactionApi transactionApi, Class<Transaction> domainClass);
 
 
+	List<TransactionApi> toApiList(List<Transaction> transactions);
 }
