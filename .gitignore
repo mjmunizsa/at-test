@@ -1,0 +1,19 @@
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Intellij
+.idea/
+*.iml
+*.iws
+*.pmd
+
+# Mac
+.DS_Store
+
+# Maven
+target/
+
+# NPM
+node_modules/
