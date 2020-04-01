@@ -1,4 +1,4 @@
-package com.example.attest.service;
+package com.example.attest.converter;
 
 import com.example.attest.model.api.TransactionApi;
 import com.example.attest.model.domain.Transaction;
