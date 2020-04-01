@@ -5,6 +5,7 @@ import com.example.attest.model.api.TransactionApi;
 import com.example.attest.model.api.TransactionStatusApiRequest;
 import com.example.attest.model.api.TransactionStatusApiResponse;
 import com.example.attest.service.TransactionService;
+import com.example.attest.service.TransactionStatusService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -27,9 +28,13 @@ public class TransactionController extends AbstractApiController {
 
 	private TransactionService transactionService;
 
-	public TransactionController(TransactionService transactionService) {
+	private TransactionStatusService transactionStatusService;
+
+
+	public TransactionController(TransactionService transactionService, TransactionStatusService transactionStatusService) {
 
 		this.transactionService = transactionService;
+		this.transactionStatusService = transactionStatusService;
 	}
 
 
@@ -45,10 +50,10 @@ public class TransactionController extends AbstractApiController {
 	}
 
 	@GetMapping(RESOURCE_TRANSACTION_MAPPING)
-	public ResponseEntity<Page<TransactionApi>> finTransactionbyAccountIban(@RequestParam("account_iban") String account_iban,
+	public ResponseEntity<Page<TransactionApi>> finTransactionbyAccountIban(@RequestParam("account_iban") String accountIban,
 		Pageable pageable) {
 
-		return new ResponseEntity<Page<TransactionApi>>(transactionService.findByAccountIban(account_iban, pageable),
+		return new ResponseEntity<>(transactionService.findByAccountIban(accountIban, pageable),
 			HttpStatus.OK);
 	}
 
@@ -67,7 +72,7 @@ public class TransactionController extends AbstractApiController {
 	public ResponseEntity<TransactionStatusApiResponse> postTransactionStatus(
 		@RequestBody TransactionStatusApiRequest transactionStatusApiRequest) {
 
-		return new ResponseEntity<>(transactionService.getTransactionStatus(transactionStatusApiRequest),
+		return new ResponseEntity<>(transactionStatusService.getTransactionStatus(transactionStatusApiRequest),
 			HttpStatus.OK);
 	}
 
