@@ -1,6 +1,8 @@
 package com.example.attest.model.api;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -20,9 +22,9 @@ public class TransactionApi {
 	private LocalDateTime date;
 
 	@NotNull
-	private Double amount;
+	private BigDecimal amount;
 
-	private Double fee;
+	private BigDecimal fee;
 
 	private String description;
 

@@ -1,5 +1,6 @@
 package com.example.attest.model.domain;
 
+import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -18,7 +19,7 @@ public class Account {
 	private String iban;
 
 	@Column(name = "balance")
-	private Double balance = 0.0D;
+	private BigDecimal balance = new BigDecimal(0);
 
 
 }

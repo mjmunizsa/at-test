@@ -3,6 +3,7 @@ package com.example.attest.model.api;
 import com.example.attest.model.domain.TransactionStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import java.math.BigDecimal;
 import lombok.Builder;
 import lombok.Data;
 
@@ -15,8 +16,8 @@ public class TransactionStatusApiResponse {
 
 	private TransactionStatus status;
 
-	private Double amount;
+	private BigDecimal amount;
 
-	private Double fee;
+	private BigDecimal fee;
 
 }

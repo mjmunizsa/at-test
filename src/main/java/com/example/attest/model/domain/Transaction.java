@@ -1,5 +1,6 @@
 package com.example.attest.model.domain;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,10 +36,10 @@ public class Transaction {
 	private LocalDateTime date;
 
 	@Column(name = "AMOUNT", nullable = false)
-	private Double amount;
+	private BigDecimal amount;
 
 	@Column(name = "FEE")
-	private Double fee;
+	private BigDecimal fee;
 
 	@Column(name = "DESCRIPTION")
 	private String description;
