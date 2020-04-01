@@ -6,6 +6,7 @@ import com.example.attest.model.api.TransactionStatusApiResponse;
 import com.example.attest.model.domain.ChannelType;
 import com.example.attest.model.domain.Transaction;
 import com.example.attest.model.domain.TransactionStatus;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Optional;
@@ -60,20 +61,22 @@ public class TransactionStatusServiceImpl implements TransactionStatusService {
 	private TransactionStatusApiResponse getStatusIfTransactionIsToday(TransactionStatusApiRequest transactionStatusApiRequest,
 		Transaction transactionStored) {
 
+		BigDecimal fee = transactionStored.getFee() == null ? BigDecimal.ZERO : transactionStored.getFee();
 		if (transactionStatusApiRequest.getChannel()
 			.equals(ChannelType.INTERNAL)) {
 			return TransactionStatusApiResponse.builder()
 				.reference(transactionStatusApiRequest.getReference())
 				.status(TransactionStatus.PENDING)
 				.amount(transactionStored.getAmount())
-				.fee(transactionStored.getFee())
+				.fee(fee)
 				.build();
 		} else {
 			// Regardless of the channel, we return the PENDING status with the fee deducted
 			return TransactionStatusApiResponse.builder()
 				.reference(transactionStatusApiRequest.getReference())
 				.status(TransactionStatus.PENDING)
-				.amount(transactionStored.getAmount().subtract(transactionStored.getFee()))
+				.amount(transactionStored.getAmount()
+					.subtract(fee))
 				.build();
 		}
 
@@ -83,20 +86,23 @@ public class TransactionStatusServiceImpl implements TransactionStatusService {
 		TransactionStatusApiRequest transactionStatusApiRequest,
 		Transaction transactionStored) {
 
+		BigDecimal fee = transactionStored.getFee() == null ? BigDecimal.ZERO : transactionStored.getFee();
+
 		if (transactionStatusApiRequest.getChannel()
 			.equals(ChannelType.INTERNAL)) {
 			return TransactionStatusApiResponse.builder()
 				.reference(transactionStatusApiRequest.getReference())
 				.status(TransactionStatus.SETTLED)
 				.amount(transactionStored.getAmount())
-				.fee(transactionStored.getFee())
+				.fee(fee)
 				.build();
 		} else {
 			// Regardless of the channel, we return the SETTLED status with the fee deducted
 			return TransactionStatusApiResponse.builder()
 				.reference(transactionStatusApiRequest.getReference())
 				.status(TransactionStatus.SETTLED)
-				.amount(transactionStored.getAmount().subtract(transactionStored.getFee()))
+				.amount(transactionStored.getAmount()
+					.subtract(fee))
 				.build();
 		}
 
@@ -106,12 +112,15 @@ public class TransactionStatusServiceImpl implements TransactionStatusService {
 		TransactionStatusApiRequest transactionStatusApiRequest,
 		Transaction transactionStored) {
 
+		BigDecimal fee = transactionStored.getFee() == null ? BigDecimal.ZERO : transactionStored.getFee();
+
 		if (transactionStatusApiRequest.getChannel()
 			.equals(ChannelType.ATM)) {
 			return TransactionStatusApiResponse.builder()
 				.reference(transactionStatusApiRequest.getReference())
 				.status(TransactionStatus.PENDING)
-				.amount(transactionStored.getAmount().subtract(transactionStored.getFee()))
+				.amount(transactionStored.getAmount()
+					.subtract(fee))
 				.build();
 
 		} else if (transactionStatusApiRequest.getChannel()
@@ -120,14 +129,15 @@ public class TransactionStatusServiceImpl implements TransactionStatusService {
 				.reference(transactionStatusApiRequest.getReference())
 				.status(TransactionStatus.FUTURE)
 				.amount(transactionStored.getAmount())
-				.fee(transactionStored.getFee())
+				.fee(fee)
 				.build();
 
 		} else {
 			return TransactionStatusApiResponse.builder()
 				.reference(transactionStatusApiRequest.getReference())
 				.status(TransactionStatus.FUTURE)
-				.amount(transactionStored.getAmount().subtract(transactionStored.getFee()))
+				.amount(transactionStored.getAmount()
+					.subtract(fee))
 				.build();
 		}
 	}

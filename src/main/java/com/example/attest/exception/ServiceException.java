@@ -1,6 +1,5 @@
 package com.example.attest.exception;
 
-import java.util.HashMap;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
 
@@ -61,28 +60,6 @@ public class ServiceException extends RuntimeException {
 		public ServiceException.Builder withHttpStatus(HttpStatus httpStatus) {
 
 			this.httpStatus = httpStatus;
-			return this;
-		}
-
-		public ServiceException.Builder withCause(Throwable cause) {
-
-			this.cause = cause;
-			return this;
-		}
-
-		public ServiceException.Builder withParams(Map<String, String> params) {
-
-			this.params = params;
-			return this;
-		}
-
-		public ServiceException.Builder addParam(String key, String value) {
-
-			if (this.params == null) {
-				this.params = new HashMap();
-			}
-
-			this.params.put(key, value);
 			return this;
 		}
 
