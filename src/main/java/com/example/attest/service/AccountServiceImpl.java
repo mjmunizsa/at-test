@@ -1,49 +1,38 @@
 package com.example.attest.service;
 
 import com.example.attest.dao.AccountRepository;
+import com.example.attest.model.api.TransactionApi;
 import com.example.attest.model.domain.Account;
-import java.util.Optional;
+import com.example.attest.validator.AccountValidator;
 import org.springframework.stereotype.Service;
 
-// This class simulates Accounts managemente microservices
+/**
+ * This class simulates Accounts managemente microservices. Although the requirements do not say anything, I think it is necessary
+ * to simulate the increase and decrease of the balance in the accounts.
+ */
+
 
 @Service
 public class AccountServiceImpl implements AccountService {
 
 	private AccountRepository accountRepository;
 
-	public AccountServiceImpl(AccountRepository accountRepository) {
+	private AccountValidator accountValidator;
+
+
+	public AccountServiceImpl(AccountRepository accountRepository, AccountValidator accountValidator) {
 
 		this.accountRepository = accountRepository;
+		this.accountValidator = accountValidator;
 	}
 
 
 	@Override
-	public Double getBalance(String iban) {
+	public Account updateBalance(TransactionApi transactionApi) {
 
-		Optional<Account> account = accountRepository.findByIban(iban);
+		Account account = accountValidator.validateAccountBalance(transactionApi);
 
-		if (!account.isPresent()) {
-			Account account1 = new Account();
-			account1.setIban(iban);
-			accountRepository.saveAndFlush(account1);
-			return account1.getBalance();
-		} else {
-			return account.get()
-				.getBalance();
-		}
-	}
-
-	@Override
-	public void updateBalance(String iban, Double balance) {
-
-		Optional<Account> account = accountRepository.findByIban(iban);
-
-		if (account.isPresent()) {
-			account.get()
-				.setBalance(balance);
-			accountRepository.saveAndFlush(account.get());
-		}
+		return accountRepository.save(account);
 	}
 
 

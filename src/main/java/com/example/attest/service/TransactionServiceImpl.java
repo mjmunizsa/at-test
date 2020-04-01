@@ -1,11 +1,14 @@
 package com.example.attest.service;
 
-import brave.Tracer;
+import com.example.attest.converter.TransactionConverter;
 import com.example.attest.dao.TransactionRepository;
 import com.example.attest.exception.ServiceException;
 import com.example.attest.model.api.TransactionApi;
+import com.example.attest.model.domain.Account;
 import com.example.attest.model.domain.Transaction;
+import com.example.attest.validator.TransactionValidator;
 import java.util.Optional;
+import javax.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -18,14 +21,17 @@ public class TransactionServiceImpl implements TransactionService {
 
 	private TransactionConverter transactionConverter;
 
-	private Tracer tracer;
+	private TransactionValidator transactionValidator;
+
+	private AccountService accountService;
 
 	public TransactionServiceImpl(TransactionRepository transactionRepository, TransactionConverter transactionConverter,
-		Tracer tracer) {
+		TransactionValidator transactionValidator, AccountService accountService) {
 
 		this.transactionRepository = transactionRepository;
 		this.transactionConverter = transactionConverter;
-		this.tracer = tracer;
+		this.transactionValidator = transactionValidator;
+		this.accountService = accountService;
 	}
 
 
@@ -58,32 +64,16 @@ public class TransactionServiceImpl implements TransactionService {
 
 
 	@Override
+	@Transactional
 	public TransactionApi create(TransactionApi transactionApi) {
 
-		Transaction transaction = transactionConverter.toModelApi(transactionApi, Transaction.class);
+		transactionValidator.validateOptionalsToCreate(transactionApi);
+		transactionValidator.validateUniqueReference(transactionApi.getReference());
 
-		if (transaction.getReference() == null) {
-			transaction.setReference(String.format("%s-%s",
-				tracer.currentSpan()
-					.context()
-					.traceIdString(),
-				tracer.currentSpan()
-					.context()
-					.spanIdString()));
-		} else {
-			TransactionApi transactionStored = findByReference(transactionApi.getReference());
-			if (transactionStored != null) {
-				throw new ServiceException.Builder(ServiceException.ERROR_TRANSACTION_DUPLICATED)
-					.withHttpStatus(HttpStatus.BAD_REQUEST)
-					.withMessage(String.format("It exists a transaction with the same reference %s",
-						transactionStored.getReference()))
-					.withHttpStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-					.build();
-			}
-		}
-
-		transaction = transactionRepository.save(transaction);
-
-		return transactionConverter.toApiModel(transaction, TransactionApi.class);
+		Transaction transactionIn = transactionConverter.toModelApi(transactionApi, Transaction.class);
+		Transaction transactionOut = transactionRepository.save(transactionIn);
+		Account account = accountService.updateBalance(transactionApi);
+		transactionApi = transactionConverter.toApiModel(transactionOut, TransactionApi.class);
+		return transactionApi;
 	}
 }

@@ -1,9 +1,11 @@
 package com.example.attest.service;
 
+import com.example.attest.model.api.TransactionApi;
+import com.example.attest.model.domain.Account;
+
 public interface AccountService {
 
-	Double getBalance(String iban);
 
-	void updateBalance(String iban, Double balance);
+	Account updateBalance(TransactionApi transactionApi);
 
 }

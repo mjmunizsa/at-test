@@ -73,7 +73,7 @@ public class TransactionStatusServiceImpl implements TransactionStatusService {
 			return TransactionStatusApiResponse.builder()
 				.reference(transactionStatusApiRequest.getReference())
 				.status(TransactionStatus.PENDING)
-				.amount(transactionStored.getAmount() - transactionStored.getFee())
+				.amount(transactionStored.getAmount().subtract(transactionStored.getFee()))
 				.build();
 		}
 
@@ -96,7 +96,7 @@ public class TransactionStatusServiceImpl implements TransactionStatusService {
 			return TransactionStatusApiResponse.builder()
 				.reference(transactionStatusApiRequest.getReference())
 				.status(TransactionStatus.SETTLED)
-				.amount(transactionStored.getAmount() - transactionStored.getFee())
+				.amount(transactionStored.getAmount().subtract(transactionStored.getFee()))
 				.build();
 		}
 
@@ -111,7 +111,7 @@ public class TransactionStatusServiceImpl implements TransactionStatusService {
 			return TransactionStatusApiResponse.builder()
 				.reference(transactionStatusApiRequest.getReference())
 				.status(TransactionStatus.PENDING)
-				.amount(transactionStored.getAmount() - transactionStored.getFee())
+				.amount(transactionStored.getAmount().subtract(transactionStored.getFee()))
 				.build();
 
 		} else if (transactionStatusApiRequest.getChannel()
@@ -127,7 +127,7 @@ public class TransactionStatusServiceImpl implements TransactionStatusService {
 			return TransactionStatusApiResponse.builder()
 				.reference(transactionStatusApiRequest.getReference())
 				.status(TransactionStatus.FUTURE)
-				.amount(transactionStored.getAmount() - transactionStored.getFee())
+				.amount(transactionStored.getAmount().subtract(transactionStored.getFee()))
 				.build();
 		}
 	}
