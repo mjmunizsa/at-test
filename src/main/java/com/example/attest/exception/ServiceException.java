@@ -8,6 +8,7 @@ public class ServiceException extends RuntimeException {
 
 	public static final String ERROR_TRANSACTION_DUPLICATED = "ERROR_TRANSACTION_DUPLICATED";
 	public static final String ERROR_TRANSACTION_NOT_FOUND = "ERROR_TRANSACTION_NOT_FOUND";
+	public static final String ERROR_BALANCE_NEGATIVE_IS_NOT_ALLOWED_ = "ERROR_BALANCE_NEGATIVE_IS_NOT_ALLOWED";
 
 
 	private final String code;
