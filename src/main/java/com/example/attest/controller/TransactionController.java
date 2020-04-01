@@ -6,6 +6,7 @@ import com.example.attest.model.api.TransactionStatusApiRequest;
 import com.example.attest.model.api.TransactionStatusApiResponse;
 import com.example.attest.service.TransactionService;
 import com.example.attest.service.TransactionStatusService;
+import javax.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -21,8 +22,8 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 public class TransactionController extends AbstractApiController {
 
-	private static final String RESOURCE_TRANSACTION_MAPPING = "/transaction";
-	private static final String RESOURCE_TRANSACTION_ID = "/{reference}";
+	public static final String RESOURCE_TRANSACTION_MAPPING = "/transaction";
+	public static final String RESOURCE_TRANSACTION_ID = "/{reference}";
 
 	private static final String RESOURCE_TRANSACTION_STATUS_MAPPING = "/transactionStatus";
 
@@ -39,10 +40,10 @@ public class TransactionController extends AbstractApiController {
 
 
 	@GetMapping(RESOURCE_TRANSACTION_MAPPING + RESOURCE_TRANSACTION_ID)
-	public TransactionApi getTransactionByReference(@PathVariable("reference") String reference) {
+	public ResponseEntity<TransactionApi> getTransactionByReference(@PathVariable("reference") String reference) {
 
 		try {
-			return transactionService.findByReference(reference);
+			return new ResponseEntity<>(transactionService.findByReference(reference),HttpStatus.OK);
 		} catch (ServiceException ex) {
 			throw new ResponseStatusException(
 				ex.getHttpStatus(), ex.getMessage(), ex);
@@ -58,7 +59,7 @@ public class TransactionController extends AbstractApiController {
 	}
 
 	@PostMapping(RESOURCE_TRANSACTION_MAPPING)
-	public ResponseEntity<TransactionApi> postTransaction(@RequestBody TransactionApi transactionApi) {
+	public ResponseEntity<TransactionApi> postTransaction(@RequestBody @Valid TransactionApi transactionApi) {
 
 		try {
 			return new ResponseEntity<>(transactionService.create(transactionApi), HttpStatus.CREATED);

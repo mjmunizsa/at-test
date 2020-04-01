@@ -7,7 +7,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-import brave.Tracer;
 import com.example.attest.converter.TransactionConverter;
 import com.example.attest.dao.TransactionRepository;
 import com.example.attest.exception.ServiceException;
@@ -87,6 +86,7 @@ public class TransactionServiceImplTest {
 
 	@Before
 	public void setUp() throws IOException {
+
 		objectMapper = new ObjectMapper();
 	}
 
@@ -137,7 +137,8 @@ public class TransactionServiceImplTest {
 
 		//given
 		TransactionApi transactionApiMock = objectMapper.readValue(transactionApiUrl, TransactionApi.class);
-		doThrow(ServiceException.class).when(transactionValidator).validateUniqueReference(Mockito.anyString());
+		doThrow(ServiceException.class).when(transactionValidator)
+			.validateUniqueReference(Mockito.anyString());
 
 		//when
 		transactionService.create(transactionApiMock);

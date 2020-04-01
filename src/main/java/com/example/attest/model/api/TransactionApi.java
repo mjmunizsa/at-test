@@ -1,6 +1,7 @@
 package com.example.attest.model.api;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -9,6 +10,7 @@ import javax.validation.constraints.Size;
 import lombok.Data;
 
 @Data
+@JsonInclude(Include.NON_NULL)
 public class TransactionApi {
 
 	@Size(max = 34)

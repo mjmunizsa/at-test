@@ -44,10 +44,9 @@ public class TransactionServiceImpl implements TransactionService {
 			return transactionConverter.toApiModel(optionalTransaction.get(), TransactionApi.class);
 		} else {
 			throw new ServiceException.Builder(ServiceException.ERROR_TRANSACTION_NOT_FOUND)
-				.withHttpStatus(HttpStatus.BAD_REQUEST)
+				.withHttpStatus(HttpStatus.NOT_FOUND)
 				.withMessage(String.format("Transaction with reference %s not found",
 					reference))
-				.withHttpStatus(HttpStatus.NOT_FOUND)
 				.build();
 		}
 
