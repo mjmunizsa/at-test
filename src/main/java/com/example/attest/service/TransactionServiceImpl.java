@@ -2,6 +2,7 @@ package com.example.attest.service;
 
 import brave.Tracer;
 import com.example.attest.dao.TransactionRepository;
+import com.example.attest.exception.ServiceException;
 import com.example.attest.model.api.TransactionApi;
 import com.example.attest.model.api.TransactionStatusApiRequest;
 import com.example.attest.model.api.TransactionStatusApiResponse;
@@ -36,10 +37,19 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public TransactionApi findByReference(String reference) {
 
-		Transaction transaction = transactionRepository.findByReference(reference)
-			.orElse(null);
+		Optional<Transaction> optionalTransaction = transactionRepository.findByReference(reference);
 
-		return transactionConverter.toApiModel(transaction, TransactionApi.class);
+		if (optionalTransaction.isPresent()) {
+			return transactionConverter.toApiModel(optionalTransaction.get(), TransactionApi.class);
+		} else {
+			throw new ServiceException.Builder(ServiceException.ERROR_TRANSACTION_NOT_FOUND)
+				.withHttpStatus(HttpStatus.BAD_REQUEST)
+				.withMessage(String.format("Transaction with reference %s not found",
+					reference))
+				.withHttpStatus(HttpStatus.NOT_FOUND)
+				.build();
+		}
+
 
 	}
 
@@ -65,6 +75,16 @@ public class TransactionServiceImpl implements TransactionService {
 				tracer.currentSpan()
 					.context()
 					.spanIdString()));
+		} else {
+			TransactionApi transactionStored = findByReference(transactionApi.getReference());
+			if (transactionStored != null) {
+				throw new ServiceException.Builder(ServiceException.ERROR_TRANSACTION_DUPLICATED)
+					.withHttpStatus(HttpStatus.BAD_REQUEST)
+					.withMessage(String.format("It exists a transaction with the same reference %s",
+						transactionStored.getReference()))
+					.withHttpStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+					.build();
+			}
 		}
 
 		transaction = transactionRepository.save(transaction);
