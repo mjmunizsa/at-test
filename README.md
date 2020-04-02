@@ -56,3 +56,8 @@ Some examples:
 ### Transaction status
 In the requirements it does not say anything about what the behavior is when the channel is not specified.
 In this sense I have assumed that the system will behave in the same way as if the CLIENT channel were specified
+
+## TODO
+- Finish documenting the API in swagger.  
+- Securing the API with Spring Security.
+- Mocking Account microservice
