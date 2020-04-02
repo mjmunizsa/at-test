@@ -25,7 +25,9 @@ public class TransactionController extends AbstractApiController {
 	public static final String RESOURCE_TRANSACTION_MAPPING = "/transaction";
 	public static final String RESOURCE_TRANSACTION_ID = "/{reference}";
 
-	private static final String RESOURCE_TRANSACTION_STATUS_MAPPING = "/transactionStatus";
+	public static final String RESOURCE_TRANSACTION_STATUS_MAPPING = "/transactionStatus";
+
+	public static final String REQUEST_PARAM_ACCOUNT_IBAN ="account_iban";
 
 	private TransactionService transactionService;
 
@@ -51,7 +53,7 @@ public class TransactionController extends AbstractApiController {
 	}
 
 	@GetMapping(RESOURCE_TRANSACTION_MAPPING)
-	public ResponseEntity<Page<TransactionApi>> finTransactionbyAccountIban(@RequestParam("account_iban") String accountIban,
+	public ResponseEntity<Page<TransactionApi>> finTransactionbyAccountIban(@RequestParam(REQUEST_PARAM_ACCOUNT_IBAN) String accountIban,
 		Pageable pageable) {
 
 		return new ResponseEntity<>(transactionService.findByAccountIban(accountIban, pageable),
