@@ -6,7 +6,6 @@ This application implements a microservice that simulates the handling and contr
 
 
 
-
 ## Requirements
 
 - Apache Maven 3 - https://maven.apache.org/download.cgi
