@@ -71,7 +71,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 		Transaction transactionIn = transactionConverter.toModelApi(transactionApi, Transaction.class);
 		Transaction transactionOut = transactionRepository.save(transactionIn);
-		Account account = accountService.updateBalance(transactionApi);
+		accountService.updateBalance(transactionApi);
 		transactionApi = transactionConverter.toApiModel(transactionOut, TransactionApi.class);
 		return transactionApi;
 	}
